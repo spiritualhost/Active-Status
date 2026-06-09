@@ -1,2 +1,4 @@
 build/
+dev/
 *.spec
+.env
