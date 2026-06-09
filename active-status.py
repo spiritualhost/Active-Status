@@ -3,7 +3,7 @@ from datetime import date
 from dotenv import load_dotenv
     
 class PGSQL_CONNECTION:
-
+    
     def __init__(self):
         #Load variables from the .env file
         load_dotenv()
