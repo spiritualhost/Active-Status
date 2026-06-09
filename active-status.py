@@ -24,7 +24,7 @@ class PGSQL_CONNECTION:
                 port=self.port,
             )
         except Exception as e:
-            print(f"Exception: {e}")
+            #print(f"Exception: {e}")
             return False
 
 def heartbeat(conn: psycopg2.extensions.connection, period_remaining: float):
@@ -53,7 +53,7 @@ def heartbeat(conn: psycopg2.extensions.connection, period_remaining: float):
         return 0
     
     except Exception as e:
-        print(f"Exception: {e}")
+        #print(f"Exception: {e}")
         return 1
 
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     #Instatiation of server connection object
     serv_connect = PGSQL_CONNECTION()
     conn = serv_connect.confirm_connection()
-    print(conn)
+    #print(conn)
 
     #Query for activation info
     result = subprocess.run(
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         text=True)
     raw_period = result.stdout
     period_remaining = float(raw_period) if raw_period != "0\n0\n" else math.inf  
-    print(period_remaining)
+    #print(period_remaining)
 
     #Heartbeat to SQL server
     print(heartbeat(conn, period_remaining))
