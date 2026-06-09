@@ -79,4 +79,4 @@ if __name__ == "__main__":
     #print(period_remaining)
 
     #Heartbeat to SQL server
-    print(heartbeat(conn, period_remaining))
+    heartbeat(conn, period_remaining)
