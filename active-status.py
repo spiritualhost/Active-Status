@@ -67,7 +67,6 @@ if __name__ == "__main__":
     #Instatiation of server connection object
     serv_connect = PGSQL_CONNECTION()
     conn = serv_connect.confirm_connection()
-    #print(conn)
 
     #Query for activation info
     result = subprocess.run(
@@ -76,7 +75,6 @@ if __name__ == "__main__":
         text=True)
     raw_period = result.stdout
     period_remaining = float(raw_period) if raw_period != "0\n0\n" else math.inf  
-    #print(period_remaining)
 
     #Heartbeat to SQL server
     heartbeat(conn, period_remaining)
