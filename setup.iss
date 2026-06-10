@@ -29,7 +29,7 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=active-status
+OutputBaseFilename=active-status-setup
 SetupIconFile=assets\w2k_info.ico
 SolidCompression=yes
 WizardStyle=modern polar
@@ -81,6 +81,12 @@ begin
     if SourceFile <> '' then
       FileCopy(SourceFile, DestFile, False);
   end;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usPostUninstall then
+    DelTree(ExpandConstant('{app}'), True, True, True);
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
