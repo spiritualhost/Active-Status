@@ -35,6 +35,7 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
+    icon='assets\\w2k_info.ico', # add icon file
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

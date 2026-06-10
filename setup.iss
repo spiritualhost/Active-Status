@@ -51,4 +51,47 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+[Code]
+var
+  CredentialsPage: TInputFileWizardPage;
 
+procedure InitializeWizard();
+begin
+  CredentialsPage := CreateInputFilePage(
+    wpSelectDir,
+    'Import Credentials',
+    'Select your .env credentials file',
+    'Credentials file (.env):'
+  );
+  CredentialsPage.Add(
+    '',
+    'Environment files|*.env|All files|*.*',
+    '.env'
+  );
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  SourceFile, DestFile: String;
+begin
+  if CurStep = ssPostInstall then
+  begin
+    SourceFile := CredentialsPage.Values[0];
+    DestFile := ExpandConstant('{app}\.env');
+    if SourceFile <> '' then
+      FileCopy(SourceFile, DestFile, False);
+  end;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  Result := True;
+  if CurPageID = CredentialsPage.ID then
+  begin
+    if CredentialsPage.Values[0] = '' then
+    begin
+      MsgBox('Please select a credentials file before continuing.', mbError, MB_OK);
+      Result := False;
+    end;
+  end;
+end;
