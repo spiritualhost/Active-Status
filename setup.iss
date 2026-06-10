@@ -51,6 +51,10 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+Filename: "schtasks"; \
+    Parameters: "/Create /F /SC DAILY /TN ""Active Status"" /TR ""{app}\{#MyAppExeName}"""; \
+    Flags: runhidden waituntilterminated
+
 [Code]
 var
   CredentialsPage: TInputFileWizardPage;
@@ -84,9 +88,14 @@ begin
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  ResultCode: Integer;
 begin
   if CurUninstallStep = usPostUninstall then
-    DelTree(ExpandConstant('{app}'), True, True, True);
+  begin      
+      Exec('schtasks', '/Delete /F /TN "Active Status"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      DelTree(ExpandConstant('{app}'), True, True, True);
+    end;
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
