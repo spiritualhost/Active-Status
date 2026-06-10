@@ -51,8 +51,8 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
-Filename: "schtasks"; \
-    Parameters: "/Create /F /SC DAILY /TN ""Active Status"" /TR ""{app}\{#MyAppExeName}"""; \
+Filename: "powershell"; \
+    Parameters: "-Command ""$action = New-ScheduledTaskAction -Execute '{app}\{#MyAppExeName}' -WorkingDirectory '{app}'; $trigger = New-ScheduledTaskTrigger -Daily -At 08:00; Register-ScheduledTask -Force -TaskName 'Active Status' -Action $action -Trigger $trigger -RunLevel Highest"""; \
     Flags: runhidden waituntilterminated
 
 [Code]
@@ -93,7 +93,7 @@ var
 begin
   if CurUninstallStep = usPostUninstall then
   begin      
-      Exec('schtasks', '/Delete /F /TN "Active Status"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      Exec('powershell', '-Command "Unregister-ScheduledTask -TaskName ''Active Status'' -Confirm:$false"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
       DelTree(ExpandConstant('{app}'), True, True, True);
     end;
 end;
