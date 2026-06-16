@@ -1,9 +1,9 @@
+import os
+import socket
+from datetime import date
 import subprocess
 import math
 import psycopg2
-import socket
-import os
-from datetime import date
 from dotenv import load_dotenv
 
 
@@ -28,8 +28,7 @@ class PGSQL_CONNECTION:
                 host=self.host,
                 port=self.port,
             )
-        except Exception as e:
-            # print(f"Exception: {e}")
+        except Exception:
             return False
 
 
