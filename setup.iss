@@ -52,7 +52,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 Filename: "powershell"; \
-    Parameters: "-Command ""$action = New-ScheduledTaskAction -Execute '{app}\{#MyAppExeName}' -WorkingDirectory '{app}'; $trigger = New-ScheduledTaskTrigger -Daily -At 08:00; Register-ScheduledTask -Force -TaskName 'Active Status' -Action $action -Trigger $trigger -RunLevel Highest"""; \
+    Parameters: "-Command ""$action = New-ScheduledTaskAction -Execute '{app}\{#MyAppExeName}' -WorkingDirectory '{app}'; $trigger = New-ScheduledTaskTrigger -Daily -At 08:00; Register-ScheduledTask -Force -TaskName 'Active Status' -Action $action -Trigger $trigger -RunLevel Highest -User 'SYSTEM'"""; \
     Flags: runhidden waituntilterminated
 
 [Code]
