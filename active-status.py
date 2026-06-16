@@ -1,11 +1,11 @@
 import os
 import socket
+import logging
 from datetime import date, datetime
 import subprocess
 import math
 import psycopg2
 from dotenv import load_dotenv
-import logging
 
 class PGSQL_CONNECTION:
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # Instatiation of server connection object
     serv_connect = PGSQL_CONNECTION()
     conn = serv_connect.confirm_connection()
-    if conn == False:
+    if not conn:
         logger.fatal(f'{datetime.now()}: Irrecoverable network error, stopping...')
 
     # Query for activation info
