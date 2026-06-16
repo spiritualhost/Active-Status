@@ -40,8 +40,7 @@ def heartbeat(conn: psycopg2.extensions.connection, period_remaining: float):
         # Try to get hostname
         try:
             hostname = socket.gethostname()
-        except Exception as e:
-            print("Hostname not found: {e}")
+        except Exception:
             return 1
 
         # Get date
