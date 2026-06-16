@@ -1,4 +1,4 @@
 build/
 dev/
-.env
+*.env
 Output/
