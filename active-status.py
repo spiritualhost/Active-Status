@@ -1,11 +1,11 @@
 import os
 import socket
-from datetime import date
+from datetime import date, datetime
 import subprocess
 import math
 import psycopg2
 from dotenv import load_dotenv
-
+import logging
 
 class PGSQL_CONNECTION:
 
@@ -28,7 +28,10 @@ class PGSQL_CONNECTION:
                 host=self.host,
                 port=self.port,
             )
-        except Exception:
+        except Exception as e:
+            logger.error(
+                (f'{datetime.now()}: Unable to make connection to SQL server. Is the firewall open for incoming traffic over the port specified in .env?: {e}')
+                )
             return False
 
 
@@ -40,7 +43,8 @@ def heartbeat(conn: psycopg2.extensions.connection, period_remaining: float):
         # Try to get hostname
         try:
             hostname = socket.gethostname()
-        except Exception:
+        except Exception as e:
+            logger.error((f'{datetime.now()}: Unresolved hostname: {e}'))
             return 1
 
         # Get date
@@ -58,9 +62,11 @@ def heartbeat(conn: psycopg2.extensions.connection, period_remaining: float):
         cur.close()
         conn.close()
 
+        logger.info((f'{datetime.now()}: Successful heartbeat!'))
         return 0
 
-    except Exception:
+    except Exception as e:
+        logger.error((f'{datetime.now()}: General heartbeat error: {e}'))
         return 1
 
 
@@ -70,10 +76,16 @@ $product.GracePeriodRemaining
 """
 
 if __name__ == "__main__":
+    #Initialize logger
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(filename="myapp.log", level=logging.INFO)
+    logger.info(f'{datetime.now()}: Active status check started...')
 
     # Instatiation of server connection object
     serv_connect = PGSQL_CONNECTION()
     conn = serv_connect.confirm_connection()
+    if conn == False:
+        logger.fatal(f'{datetime.now()}: Irrecoverable network error, stopping...')
 
     # Query for activation info
     result = subprocess.run(
@@ -85,4 +97,8 @@ if __name__ == "__main__":
         raw_period) if raw_period != "0\n0\n" else math.inf
 
     # Heartbeat to SQL server
-    heartbeat(conn, period_remaining)
+    beat_status = heartbeat(conn, period_remaining)
+    if beat_status == 1:
+        logger.warning(f'{datetime.now()}: Issue sending heartbeat to PostgreSQL table...')
+    else:
+        logger.info(f'{datetime.now()}: Active status check sent to PostgreSQL table...')
