@@ -1,26 +1,52 @@
 # Get notifications by email when certain machines hit a predetermined threshold
 import argparse
 import os
+import configparser
 import tkinter as tk
 from tkinter import ttk
 
 #Update notification settings interactively
 def launch_gui(config_path: str):
-    #Config
-    with open(config_path, "w") as conf:
-        conf.write("Hello world")
+
+    #Config setup
+    config = configparser.ConfigParser()
+    config.read(config_path)
+    #Add settings section to config
+    config['settings'] = {}   
+    with open(config_path, "w", encoding="utf-8") as configfile:
+        config.write(configfile)
+
 
     #Entry box functions
-    def submit_txt(entry):
-        user_input = entry.get()
-        print(user_input)
-        return
+    def submit_txt(entry_boxes: dict):
+        try:
+            for varname, entry in entry_boxes.items():
+                user_input = str(entry.get())
+                
+                #Write to config file
+                config['settings'][f'{str(varname)}'] = user_input
+                with open(config_path, "w", encoding="utf-8") as configfile:
+                    config.write(configfile)
+
+            return 0
+        
+        except Exception as e:
+            print(f"Exception: {e}")
     
-    def clear_txt(entry):
-        #Delete text from index 0 to the end
-        entry.delete(0, tk.END)
-        print("Text cleared")
-        return
+    
+    def clear_txt(entry_boxes: dict):
+        try:
+            for entry in entry_boxes.values():
+
+                #Delete text from index 0 to the end
+                entry.delete(0, tk.END)
+                print("Text cleared")
+
+            return 0
+        
+        except Exception as e:
+            print(f"Exception: {e}")
+
 
     #Initialize the main window
     root = tk.Tk()
@@ -29,15 +55,21 @@ def launch_gui(config_path: str):
     root.resizable(False, False)
 
     #Set up entry boxes
-    email = ttk.Entry(root, width=25)
+    email = ttk.Entry(root, width=50)
     email.pack(pady=10)
     email.insert(0, "Enter desired destination email...")
 
+    days = ttk.Entry(root, width=50)
+    days.pack(pady=10)
+    days.insert(0, "Notify for all machines with less than this many days left in eval...")
+
+    entry_boxes = {"email": email, "days": days}
+
     #Set up control buttons
-    submit = ttk.Button(root, text="Submit", command=lambda:submit_txt(email))
+    submit = ttk.Button(root, text="Submit", command=lambda:submit_txt(entry_boxes))
     submit.pack(pady=10)
 
-    clear = ttk.Button(root, text="Clear All", command=lambda:clear_txt(email))
+    clear = ttk.Button(root, text="Clear All", command=lambda:clear_txt(entry_boxes))
     clear.pack(pady=10)
 
     #Start main loop
@@ -58,9 +90,9 @@ if __name__ == "__main__":
     config_file = os.path.join(config_directory, "config.ini")
 
     #Use argparse to take in cmdline arguments
-    parser = argparse.ArgumentParser(description="Threshold Notification")
-    parser.add_argument("--db_check", action="store_true", help="Run automated SQL check for countdown threshold")
-    args = parser.parse_args()
+    argparser = argparse.ArgumentParser(description="Threshold Notification")
+    argparser.add_argument("--db_check", action="store_true", help="Run automated SQL check for countdown threshold")
+    args = argparser.parse_args()
 
     #Argparse branches
     if args.db_check and os.path.exists(config_file):
