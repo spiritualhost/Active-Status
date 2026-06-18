@@ -6,6 +6,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from email_validator import validate_email, EmailNotValidError
 
+from utils import *
+
 #Input validation
 def valid_email(email_address: str):
     try:
@@ -38,24 +40,25 @@ def launch_gui(config_path: str):
             for varname, entry in entry_boxes.items():
                 user_input = str(entry.get())
 
-                #Email validation
+                #Input validation
                 if str(varname) == "email":
                     email_result = valid_email(user_input)
                     if email_result[0]:
                         user_input = email_result[1]
                     else:
                         messagebox.showerror("Bad Entry", f"Email invalid: {email_result[1]}")
-
-
+                        return 1
+                else:
+                    if not user_input.isdigit():
+                        messagebox.showerror("Bad Entry", f"Unusable day count.")
+                        return 1
                 
-
-
                 #Write to config file
                 config['settings'][f'{str(varname)}'] = user_input
-                with open(config_path, "w", encoding="utf-8") as configfile:
-                    config.write(configfile)
 
-            return 0
+            with open(config_path, "w", encoding="utf-8") as configfile:
+                config.write(configfile)
+            messagebox.showinfo("Good Entry", "Successful write to config file!")
         
         except Exception as e:
             print(f"Exception: {e}")
