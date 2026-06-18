@@ -3,7 +3,22 @@ import argparse
 import os
 import configparser
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+from email_validator import validate_email, EmailNotValidError
+
+#Input validation
+def valid_email(email_address: str):
+    try:
+        #Check syntax and deliverability with a DNS lookup
+        email_info = validate_email(email_address, check_deliverability=True)
+
+        #Normalize
+        normalized_email = email_info.email
+        return True, normalized_email
+
+    except EmailNotValidError as e:
+        return False, str(e)
+
 
 #Update notification settings interactively
 def launch_gui(config_path: str):
@@ -22,7 +37,19 @@ def launch_gui(config_path: str):
         try:
             for varname, entry in entry_boxes.items():
                 user_input = str(entry.get())
+
+                #Email validation
+                if str(varname) == "email":
+                    email_result = valid_email(user_input)
+                    if email_result[0]:
+                        user_input = email_result[1]
+                    else:
+                        messagebox.showerror("Bad Entry", f"Email invalid: {email_result[1]}")
+
+
                 
+
+
                 #Write to config file
                 config['settings'][f'{str(varname)}'] = user_input
                 with open(config_path, "w", encoding="utf-8") as configfile:
@@ -33,7 +60,7 @@ def launch_gui(config_path: str):
         except Exception as e:
             print(f"Exception: {e}")
     
-    
+
     def clear_txt(entry_boxes: dict):
         try:
             for entry in entry_boxes.values():
