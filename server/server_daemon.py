@@ -28,11 +28,8 @@ def launch_gui(config_path: str):
     #Config setup
     config = configparser.ConfigParser()
     config.read(config_path)
-    #Add settings section to config
-    config['settings'] = {}   
-    with open(config_path, "w", encoding="utf-8") as configfile:
-        config.write(configfile)
-
+    if 'settings' not in config:
+        config['settings'] = {}
 
     #Entry box functions
     def submit_txt(entry_boxes: dict):
@@ -53,9 +50,9 @@ def launch_gui(config_path: str):
                         messagebox.showerror("Bad Entry", f"Unusable day count.")
                         return 1
                 
-                #Write to config file
                 config['settings'][f'{str(varname)}'] = user_input
-
+            
+            #Write to config file
             with open(config_path, "w", encoding="utf-8") as configfile:
                 config.write(configfile)
             messagebox.showinfo("Good Entry", "Successful write to config file!")
@@ -105,12 +102,12 @@ def launch_gui(config_path: str):
     #Start main loop
     root.mainloop()
 
-    return
+    return 0
 
 #Check over SQL server for predetermined countdown threshold
 def tempfunc():
     print("Tempfunc")
-    return
+    return 0
 
 if __name__ == "__main__":
     #Write configurations to APPDATA to prevent permissions issues
