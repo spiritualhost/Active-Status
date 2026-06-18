@@ -82,7 +82,6 @@ if __name__ == "__main__":
     os.makedirs(log_directory, exist_ok=True) #Create log directory if nonexistent
     log_file = os.path.join(log_directory, "as.log")
 
-
     #Initialize logger
     logger = logging.getLogger(__name__)
     logging.basicConfig(filename=log_file, level=logging.INFO)
