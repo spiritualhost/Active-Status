@@ -76,9 +76,16 @@ $product.GracePeriodRemaining
 """
 
 if __name__ == "__main__":
+    #Write logs to APPDATA to prevent permissions issues
+    app_data_path = os.environ.get("LOCALAPPDATA")
+    log_directory = os.path.join(app_data_path, "ActiveStatus", "Logs")
+    os.makedirs(log_directory, exist_ok=True) #Create log directory if nonexistent
+    log_file = os.path.join(log_directory, "as.log")
+
+
     #Initialize logger
     logger = logging.getLogger(__name__)
-    logging.basicConfig(filename="myapp.log", level=logging.INFO)
+    logging.basicConfig(filename=log_file, level=logging.INFO)
     logger.info(f'{datetime.now()}: Active status check started...')
 
     # Instatiation of server connection object
