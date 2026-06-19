@@ -104,10 +104,19 @@ def launch_gui(config_path: str):
 
     return 0
 
-#Check over SQL server for predetermined countdown threshold
+#Check over SQL server for predetermined countdown threshold, send email
 def tempfunc():
     print("Tempfunc")
+    serv_connect = SQL_SCAN()
+    conn = serv_connect.confirm_connection()
+    if not conn:
+        print("Bad connection.")
+        return 1
+    print("Good connection.")
     return 0
+
+
+
 
 if __name__ == "__main__":
     #Write configurations to APPDATA to prevent permissions issues
