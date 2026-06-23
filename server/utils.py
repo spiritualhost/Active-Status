@@ -1,6 +1,6 @@
 #Utils for assisting the server daemon
-import psycopg2, configparser, os
-from datetime import datetime
+import psycopg2, os
+from datetime import datetime, date
 from dotenv import load_dotenv
 
 #SQL
@@ -30,8 +30,34 @@ class SQL_SCAN:
             print(f'{datetime.now()}: Unable to make connection to SQL server. Is the firewall open for incoming traffic over the port specified in .env?: {e}')
             return False
 
-    def scan_query(self, conn: psycopg2.extensions.connection):
-        return        
+    def scan_query(self, conn: psycopg2.extensions.connection, days_left: int):
+        try:
+            with conn.cursor() as cur:
+                #Get today's date
+                today = date.today()
+
+                #Execute a query
+                query = """
+                    SELECT * 
+                    FROM servers 
+                    WHERE (activation_period::float / 1440) < %s
+                        AND date = %s;
+                """
+
+                cur.execute(query, (days_left, today))
+
+                #Fetch all the rows
+                rows = cur.fetchall()
+
+                #Iteratre through rows ***FIX THIS***
+                for row in rows:
+                    print(f"date: {row[0]}, hostname: {row[1]}, activation period: {row[2]}")
+
+            return 0
+
+        except Exception as e:
+            print(f"General exception: {e}")
+            return 1    
 
 #Email setup
 class EMAIL_SETUP:

@@ -105,14 +105,36 @@ def launch_gui(config_path: str):
     return 0
 
 #Check over SQL server for predetermined countdown threshold, send email
-def tempfunc():
-    print("Tempfunc")
+def scan_and_report(config_path: str):    
+    #Parse config for query details
+    try:
+        config = configparser.ConfigParser()
+        config.read(config_path)
+        
+        email = config["settings"]["email"]
+        days_left = config.getint("settings", "days")
+
+        print("Successful config read.")
+
+    except Exception as e:
+        print(f"Exception: unreadable config: {e}")
+
+    #Set up PostgreSQL server connection
     serv_connect = SQL_SCAN()
     conn = serv_connect.confirm_connection()
     if not conn:
         print("Bad connection.")
         return 1
     print("Good connection.")
+
+    #Scan the SQL database using the query as detailed in the config
+    serv_connect.scan_query(conn, days_left)
+
+    
+
+
+
+
     return 0
 
 
@@ -132,7 +154,7 @@ if __name__ == "__main__":
 
     #Argparse branches
     if args.db_check and os.path.exists(config_file):
-        tempfunc()
+        scan_and_report(config_file)
     
     #This branch will launch if the config file is non-existent in APPDATA or if launched interactively (i.e., without cmd line args)
     else:
