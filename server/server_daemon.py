@@ -127,13 +127,10 @@ def scan_and_report(config_path: str):
         return 1
     print("Good connection.")
 
-    #Scan the SQL database using the query as detailed in the config
-    serv_connect.scan_query(conn, days_left)
+    #Scan the SQL database using the query as detailed in the config, return dictionary
+    applicable_machines = serv_connect.scan_query(conn, days_left)
 
-    
-
-
-
+    print(applicable_machines)
 
     return 0
 

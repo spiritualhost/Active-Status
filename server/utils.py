@@ -50,10 +50,13 @@ class SQL_SCAN:
                 rows = cur.fetchall()
 
                 #Iteratre through rows ***FIX THIS***
+                applicable_machines = {}
                 for row in rows:
-                    print(f"date: {row[0]}, hostname: {row[1]}, activation period: {row[2]}")
+                    hostname = row[1]
+                    days_left = int(row[2] / 1440.0)
+                    applicable_machines[hostname] = days_left
 
-            return 0
+            return applicable_machines
 
         except Exception as e:
             print(f"General exception: {e}")
