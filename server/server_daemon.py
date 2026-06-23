@@ -130,7 +130,9 @@ def scan_and_report(config_path: str):
     #Scan the SQL database using the query as detailed in the config, return dictionary
     applicable_machines = serv_connect.scan_query(conn, days_left)
 
-    print(applicable_machines)
+    #Send an email notification
+    email_notification = EMAIL_NOTIFICATION(email, applicable_machines)
+    email_notification.email_setup()
 
     return 0
 

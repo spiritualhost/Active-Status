@@ -1,5 +1,6 @@
 #Utils for assisting the server daemon
-import psycopg2, os
+import psycopg2, os, smtplib
+from email.message import EmailMessage
 from datetime import datetime, date
 from dotenv import load_dotenv
 
@@ -63,6 +64,24 @@ class SQL_SCAN:
             return 1    
 
 #Email setup
-class EMAIL_SETUP:
-    def __init__(self):
+class EMAIL_NOTIFICATION:
+    def __init__(self, email: str, applicable_machines: dict):
+        self.email = email
+        self.table = applicable_machines
+        return
+
+    def email_setup(self):
+        print(f"Setting up email notification to address: {self.email}")
+
+        #Configuration details here
+        #Need to figure this out, preferably not plaintext
+
+        #Build the email message
+
+        #Establish a secure connection to the smtp server and send
+
+        return
+    
+    def send_email(self):
+        
         return
