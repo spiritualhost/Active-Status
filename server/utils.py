@@ -73,12 +73,35 @@ class EMAIL_NOTIFICATION:
     def email_setup(self):
         print(f"Setting up email notification to address: {self.email}")
 
+        #Get today's date
+        today = date.today()
+
         #Configuration details here
         #Need to figure this out, preferably not plaintext
 
         #Build the email message
+        msg = EmailMessage()
+        msg["Subject"] = f"Machine Status - {today}"
+
+        print(self.table)
+
+        #Set up pretty table for email message
+        html = '<table style="width:100%">'
+        html += '<tr>'
+        html += '<th>' + 'machine' + '</th>'
+        html += '<th>' + 'days left' + '</th>'
+        html += '</tr>'
+   
+        for machine, days in self.table.items():
+            html += '<tr>'
+            html += '<td>' + machine + '</td>'
+            html += '<td>' + str(days) + ' days left.</td>'
+            html += '</tr>'
+        html += '</table>'
 
         #Establish a secure connection to the smtp server and send
+
+        print(html)
 
         return
     

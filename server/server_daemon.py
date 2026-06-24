@@ -133,6 +133,7 @@ def scan_and_report(config_path: str):
     #Send an email notification
     email_notification = EMAIL_NOTIFICATION(email, applicable_machines)
     email_notification.email_setup()
+    email_notification.send_email()
 
     return 0
 
