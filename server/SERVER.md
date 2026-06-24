@@ -15,3 +15,11 @@ PASSWORD="{read only user's password}"
 HOST="{IP address for host}"
 PORT="{server port, default is usually 5432}"
 ```
+
+## Compile
+
+The file `active-status-daemon.spec` is used to properly link the dlls required by the psycopg2 library.
+
+```powershell
+pyinstaller.exe .\active-status-daemon.spec
+```

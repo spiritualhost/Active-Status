@@ -21,7 +21,6 @@ def valid_email(email_address: str):
     except EmailNotValidError as e:
         return False, str(e)
 
-
 #Update notification settings interactively
 def launch_gui(config_path: str):
 
@@ -136,9 +135,6 @@ def scan_and_report(config_path: str):
     email_notification.send_email()
 
     return 0
-
-
-
 
 if __name__ == "__main__":
     #Write configurations to APPDATA to prevent permissions issues
