@@ -26,6 +26,8 @@ python.exe .\server_daemon.py --db_check
 
 Or similarly with the compiled executable.
 
+The daemon expects explicit TLS, so a TLS port should be specified for the SMTP server. It is recommended to set up 2FA or MFA on whichever SMTP account is used, given the method of credential storage (this can be improved in the future).
+
 ## Compile
 
 The file `active-status-daemon.spec` is used to properly link the dlls required by the psycopg2 library.
