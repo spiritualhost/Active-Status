@@ -13,7 +13,6 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
-DisableDirPage=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
@@ -47,7 +46,7 @@ var
 procedure InitializeWizard();
 begin
   CredentialsPage := CreateInputFilePage(
-    wpSelectDir,
+    wpWelcome,
     'Import Credentials',
     'Select your .env credentials file',
     'Credentials file (.env):'
