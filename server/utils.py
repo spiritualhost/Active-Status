@@ -1,5 +1,5 @@
 #Utils for assisting the server daemon
-import psycopg2, os, smtplib
+import psycopg2, os, smtplib, ssl
 from email.message import EmailMessage
 from datetime import datetime, date
 from dotenv import load_dotenv
@@ -123,5 +123,26 @@ class EMAIL_NOTIFICATION:
 
     #Establish a secure connection to the smtp server and send
     def send_email(self, msg):
+        try:
+            #Create a standard security context configuration
+            context = ssl.create_default_context()
+
+            #Establish a TLS connection to the server
+            with smtplib.SMTP(self.server, self.port) as server:
+                #Send EHLO to SMTP server to identify self
+                server.ehlo()
+
+                server.starttls(context=context)
+
+                server.ehlo()
+
+                #Authenticate and transmit the payload
+                server.login(self.sender_email, self.sender_password)
+                server.send_message(msg)
+
+                print("Secure email transmission!")    
+            
+                return 0
         
-        return
+        except Exception as e:
+            print(f"An error occurred: {e}")
