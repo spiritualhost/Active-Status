@@ -211,6 +211,10 @@ def scan_and_report(config_path: str):
         
         email = config["settings"]["email"]
         days_left = config.getint("settings", "days")
+        smtp_server = config["settings"]["smtp_server"]
+        smtp_port = config.getint("settings", "smtp_port")
+        sender_email = config["settings"]["sender_email"]
+        sender_password = config["settings"]["sender_password"]
 
         print("Successful config read.")
 
@@ -229,9 +233,9 @@ def scan_and_report(config_path: str):
     applicable_machines = serv_connect.scan_query(conn, days_left)
 
     #Send an email notification
-    email_notification = EMAIL_NOTIFICATION(email, applicable_machines)
-    email_notification.email_setup()
-    email_notification.send_email()
+    email_notification = EMAIL_NOTIFICATION(email, applicable_machines, smtp_server, smtp_port, sender_email, sender_password)
+    msg = email_notification.email_setup()
+    email_notification.send_email(msg)
 
     return 0
 

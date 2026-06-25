@@ -65,9 +65,13 @@ class SQL_SCAN:
 
 #Email setup
 class EMAIL_NOTIFICATION:
-    def __init__(self, email: str, applicable_machines: dict):
+    def __init__(self, email: str, applicable_machines: dict, smtp_server: str, port: int, sender_email: str, sender_password: str):
         self.email = email
         self.table = applicable_machines
+        self.server = smtp_server
+        self.port = port
+        self.sender_email = sender_email
+        self.sender_password = sender_password
         return
 
     def email_setup(self):
@@ -82,29 +86,42 @@ class EMAIL_NOTIFICATION:
         #Build the email message
         msg = EmailMessage()
         msg["Subject"] = f"Machine Status - {today}"
+        msg["From"] = self.sender_email
+        msg["To"] = self.email
+
+        html = """\
+            <!DOCTYPE html>
+            <html>
+                <body style="background-color: #f0f4f8;">
+                    <p><i>The following machines fall below the threshold you set:</i></p>
+        """
 
         print(self.table)
 
         #Set up pretty table for email message
-        html = '<table style="width:100%">'
-        html += '<tr>'
-        html += '<th>' + 'machine' + '</th>'
-        html += '<th>' + 'days left' + '</th>'
+        html += '<table style="width: 100%; border-collapse: collapse;">'
+        html += '<tr style="background-color: #f2f2f2;">'
+        html += '<th style="border-bottom: 2px solid #333; padding: 8px; text-align: left;">' + 'machine' + '</th>'
+        html += '<th style="border-bottom: 2px solid #333; padding: 8px; text-align: left;">' + 'days left' + '</th>'
         html += '</tr>'
    
         for machine, days in self.table.items():
-            html += '<tr>'
-            html += '<td>' + machine + '</td>'
-            html += '<td>' + str(days) + ' days left.</td>'
+            html += '<tr style="background-color: #f2f2f2;">'
+            html += '<td style="border-bottom: 1px solid #ddd; padding: 8px;">' + machine + '</td>'
+            html += '<td style="border-bottom: 1px solid #ddd; padding: 8px;">' + str(days) + ' days left.</td>'
             html += '</tr>'
         html += '</table>'
 
-        #Establish a secure connection to the smtp server and send
+        html += """\
+                </body>
+            </html>
+        """
 
-        print(html)
+        msg.add_alternative(html, subtype="html")
 
-        return
-    
-    def send_email(self):
+        return msg
+
+    #Establish a secure connection to the smtp server and send
+    def send_email(self, msg):
         
         return
