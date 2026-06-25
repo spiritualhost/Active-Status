@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 class SQL_SCAN:
     def __init__(self):
         #Load variables from the .env file
-        load_dotenv()
+        load_dotenv(override=True)
 
         self.database = os.getenv("DATABASE")
         self.user = os.getenv("USER")

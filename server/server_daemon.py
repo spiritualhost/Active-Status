@@ -240,16 +240,18 @@ def scan_and_report(config_path: str):
     return 0
 
 if __name__ == "__main__":
+    #Use argparse to take in cmdline arguments
+    argparser = argparse.ArgumentParser(description="Activation Status Threshold Notification for Windows Machines")
+    argparser.add_argument("--db_check", action="store_true", help="Run automated SQL check for countdown threshold.")
+    argparser.add_argument("--config", type=str, default=None, help="Explicit path to config.ini file for automation.")
+    args = argparser.parse_args()
+
     #Write configurations to APPDATA to prevent permissions issues
-    app_data_path = os.environ.get("LOCALAPPDATA")
+    app_data_path = os.environ.get("PROGRAMDATA")
     config_directory = os.path.join(app_data_path, "ThresholdNotifications (ActiveStatus)", "Config")
     os.makedirs(config_directory, exist_ok=True) #Create config directory if nonexistent
-    config_file = os.path.join(config_directory, "config.ini")
-
-    #Use argparse to take in cmdline arguments
-    argparser = argparse.ArgumentParser(description="Threshold Notification")
-    argparser.add_argument("--db_check", action="store_true", help="Run automated SQL check for countdown threshold")
-    args = argparser.parse_args()
+    
+    config_file = args.config if args.config else os.path.join(config_directory, "config.ini")
 
     #Argparse branches
     if args.db_check and os.path.exists(config_file):
