@@ -44,11 +44,16 @@ def launch_gui(config_path: str):
                     else:
                         messagebox.showerror("Bad Entry", f"Email invalid: {email_result[1]}")
                         return 1
-                else:
+                elif str(varname) == "days":
                     if not user_input.isdigit():
                         messagebox.showerror("Bad Entry", f"Unusable day count.")
                         return 1
                 
+
+
+
+                
+                #Add to the config variable for future write
                 config['settings'][f'{str(varname)}'] = user_input
             
             #Write to config file
@@ -77,8 +82,16 @@ def launch_gui(config_path: str):
     #Initialize the main window
     root = tk.Tk()
     root.title("Configure email notifications.")
-    root.geometry("400x200")
+    root.geometry("1000x600")
     root.resizable(False, False)
+
+    #Inner box title
+    inner_title = ttk.Label(root, text="Please fill out the following...")
+    inner_title.pack(pady=10)  
+
+    #Section delimit
+    label1 = ttk.Label(root, text="Email Notification Settings")
+    label1.pack(pady=10)
 
     #Set up entry boxes
     email = ttk.Entry(root, width=50)
@@ -89,7 +102,34 @@ def launch_gui(config_path: str):
     days.pack(pady=10)
     days.insert(0, "Notify for all machines with less than this many days left in eval...")
 
-    entry_boxes = {"email": email, "days": days}
+
+    #Section delimit
+    label2 = ttk.Label(root, text="SMTP Server Settings")
+    label2.pack(pady=10)
+
+    smtp_server = ttk.Entry(root, width=50)
+    smtp_server.pack(pady=10)
+    smtp_server.insert(0, "Enter SMTP server address...")
+
+    smtp_port = ttk.Entry(root, width=50)
+    smtp_port.pack(pady=10)
+    smtp_port.insert(0, "Enter SMTP server port...")
+   
+    sender_email = ttk.Entry(root, width=50)
+    sender_email.pack(pady=10)
+    sender_email.insert(0, "Enter sender email...")
+
+    sender_password = ttk.Entry(root, width=50)
+    sender_password.pack(pady=10)
+    sender_password.insert(0, "Enter sender password...")
+
+    entry_boxes = {"email": email, 
+                   "days": days, 
+                   "smtp_server": smtp_server,
+                   "smtp_port": smtp_port,
+                   "sender_email": sender_email,
+                   "sender_password": sender_password
+    }
 
     #Set up control buttons
     submit = ttk.Button(root, text="Submit", command=lambda:submit_txt(entry_boxes))
@@ -97,6 +137,9 @@ def launch_gui(config_path: str):
 
     clear = ttk.Button(root, text="Clear All", command=lambda:clear_txt(entry_boxes))
     clear.pack(pady=10)
+
+    quit = ttk.Button(root, text="Quit", command=root.destroy)
+    quit.pack(pady=10)
 
     #Start main loop
     root.mainloop()
