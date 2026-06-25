@@ -16,6 +16,16 @@ HOST="{IP address for host}"
 PORT="{server port, default is usually 5432}"
 ```
 
+SMTP server credentials are necessary to the performance of the daemon, so they will be entered when the GUI is launched -- do this by doubleclicking on the exe (the GUI will also launch via the command line and if a config file doesn't exist).
+
+Launch a database scan with the settings specified in the config file with:
+
+```powershell
+python.exe .\server_daemon.py --db_check
+```
+
+Or similarly with the compiled executable.
+
 ## Compile
 
 The file `active-status-daemon.spec` is used to properly link the dlls required by the psycopg2 library.

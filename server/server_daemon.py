@@ -2,13 +2,16 @@
 import argparse
 import os
 import configparser
+import smtplib
+import socket
 import tkinter as tk
 from tkinter import ttk, messagebox
 from email_validator import validate_email, EmailNotValidError
 
 from utils import *
 
-#Input validation
+#Input validation functions
+#Just verify that an email address appears valid (without SMTP credentials)
 def valid_email(email_address: str):
     try:
         #Check syntax and deliverability with a DNS lookup
@@ -20,6 +23,40 @@ def valid_email(email_address: str):
 
     except EmailNotValidError as e:
         return False, str(e)
+
+#Verify valid SMTP credentials (necessary to perform)
+def verify_smtp_server(smtp_server: str, port: int, username: str, password: str, use_tls=True):
+    print(f"Server: {smtp_server}\nPort: {port}\nUsername: {username}\nPassword: {password}")
+    try:
+        #Establish an initial connection with a 10 sec timeout
+        server = smtplib.SMTP(smtp_server, port, timeout=10)
+
+        #Send an EHLO greeting with TLS
+        server.starttls()
+        server.ehlo()
+
+        #Attempt a server login
+        server.login(username, password)
+
+        #Cleanly disconnect
+        server.quit()
+
+        return (True, "Successful SMTP connection")
+
+    except socket.timeout:
+        return(False, "Error: socket timeout.")
+
+    except (socket.gaierror, ConnectionRefusedError):
+        return(False, "Error: could not connect to server, please check server address.")
+
+    except smtplib.SMTPAuthenticationError:
+        return(False, "Error: authentication failed, incorrect username or password.")
+
+    except smtplib.SMTPException as e:
+        return(False, f"SMTP error occurred: {e}")
+
+    except Exception as e:
+        return(False, f"An unexpected error occurred: {e}")
 
 #Update notification settings interactively
 def launch_gui(config_path: str):
@@ -33,6 +70,11 @@ def launch_gui(config_path: str):
     #Entry box functions
     def submit_txt(entry_boxes: dict):
         try:
+            temp_smtp_dict = {"smtp_server": "",
+                              "smtp_port": "",
+                              "sender_email": "",
+                              "sender_password": ""} #Used in SMTP validation below
+
             for varname, entry in entry_boxes.items():
                 user_input = str(entry.get())
 
@@ -44,18 +86,32 @@ def launch_gui(config_path: str):
                     else:
                         messagebox.showerror("Bad Entry", f"Email invalid: {email_result[1]}")
                         return 1
+
+                #Days only needs to be a positive integer
                 elif str(varname) == "days":
                     if not user_input.isdigit():
-                        messagebox.showerror("Bad Entry", f"Unusable day count.")
+                        messagebox.showerror("Bad Entry", f"Unusable day count: {user_input}.")
                         return 1
-                
+                    
+                #Smtp server settings populate the dictionary
+                if str(varname) in temp_smtp_dict:
+                    temp_smtp_dict[str(varname)] = user_input
 
-
-
-                
                 #Add to the config variable for future write
                 config['settings'][f'{str(varname)}'] = user_input
-            
+
+            #Check if all SMTP fields are populated after the loop through entry fields
+            if all(temp_smtp_dict.values()): #Returns True if no falsy values
+                messagebox.showinfo("Performing SMTP check.", "Now checking SMTP credentials...")      
+                response = verify_smtp_server(temp_smtp_dict["smtp_server"], temp_smtp_dict["smtp_port"], temp_smtp_dict["sender_email"], temp_smtp_dict["sender_password"])
+
+                if response[0] == False:
+                    messagebox.showerror("Huh?", response[1])
+                    clear_txt(entry_boxes)
+                    return 1
+                else:
+                    messagebox.showinfo("Successful SMTP config", response[1])
+
             #Write to config file
             with open(config_path, "w", encoding="utf-8") as configfile:
                 config.write(configfile)
