@@ -10,6 +10,8 @@ The file `active-status.spec` is used to properly link the dlls required by the 
 pyinstaller.exe .\active-status.spec
 ```
 
+This daemon is currently compatible with Windows systems.
+
 ## PostgreSQL
 
 Each client daemon will write to a network PostgreSQL server determined by the information provided in a `.env` file so the corresponding server daemon has accurate data to send daily emails. The .env file will look like this:

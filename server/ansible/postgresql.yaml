@@ -1,0 +1,30 @@
+---
+- name: Set up and configure PostgreSQL server
+  hosts: postgres
+  gather_facts: false
+  become: true
+  become_method: ansible.builtin.runas
+  become_user: SYSTEM
+
+  tasks:
+    - name: Install PostgreSQL Server and pgAdmin 4 GUI
+      chocolatey.chocolatey.win_chocolatey:
+        name:
+          - postgresql16  #Installs database engine + psql
+          - pgadmin4  #Installs the graphical desktop management tool
+        state: present
+        package_params: "/Password:P@ssword1"
+    
+    - name: Add psql tool to Windows System PATH
+      ansible.windows.win_path:
+        elements:
+          - 'C:\Program Files\PostgreSQL\16\bin'
+        state: present
+        scope: machine
+    
+    - name: Ensure PostgreSQL service is running and set to automatic
+      ansible.windows.win_service:
+        name: postgresql-x64-16
+        state: started
+        start_mode: auto 
+        

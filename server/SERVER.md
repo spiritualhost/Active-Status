@@ -38,14 +38,49 @@ PostgreSQL can be [downloaded from their page here](https://www.postgresql.org/d
 
 #### Ansible
 
-Community Ansible was used for our setup to provision the PostgreSQL server. Community Ansible is supported on most systems with Python installed.
+Community Ansible was used for our setup to provision the PostgreSQL server. [Instructions for setup are located here](https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html?extIdCarryOver=true&percmp=RHCTG0260000490184&sc_cid=RHCTG0180000382536).
 
+*Although it is possible to use the control node (the management computer) as the managed node (the target server) to keep hypervisor footprint low by specifying localhost, this risks the "it works on my computer" problem and is not recommended. Even a separate TTY linux environment will be more reliable.*
 
+```bash
+[ Control Node ]  --- (Sends instructions via SSH) --->  [ Managed Node ]
+(Where Ansible is                                         (The server being configured; 
+ installed & run)                                         PostgreSQL gets installed here)
+```
 
+Ansible is agentless, so nothing needs to be installed on the production machines reporting to the central SQL server. The control node server will need Python installed, but if it's a Linux server it's likely already there; it will also need the applicable winrm and chocolatey tools (the requirements can also be installed from the included `requirements.yaml` file).
 
+```bash
+ansible-galaxy collection install -r collections/requirements.yaml
+```
 
+The Windows server will [need winrm enabled](https://docs.ansible.com/projects/ansible/latest/os_guide/windows_winrm.html#windows-winrm) and [will need to install chocolatey](https://docs.chocolatey.org/en-us/choco/setup/#install-with-powershell.exe).
 
+Once Ansible has been installed on the control node of choice, we'll be ready to run the `postgresql.yaml` playbook and get the server set up.
 
+1) Create an inventory file `inventory.ini` in the below format and add the IP address of the desired Windows server
+
+```ini
+[postgres]
+192.168.1.50
+
+[postgres:vars]
+ansible_connection=winrm
+ansible_port=5985
+ansible_winrm_scheme=http
+ansible_winrm_transport=ntlm
+ansible_user=youradmin
+```
+
+*Much of this is defaults and SHOULD be changed later.*
+
+2) Target the postgres inventory source from the command line using the provided playbook
+
+```bash
+ansible-playbook -i inventory.ini postgresql.yml -k
+```
+
+*The --check flag at the end of the command will allow you to see the impact on the servers prior to actually applying them.*
 
 ## Compile
 
@@ -54,3 +89,5 @@ The file `active-status-daemon.spec` is used to properly link the dlls required 
 ```powershell
 pyinstaller.exe .\active-status-daemon.spec
 ```
+
+This daemon is currently compatible with Windows systems.

@@ -4,3 +4,4 @@ dev/
 *.log
 Output/
 *.pyc
+inventory.ini
