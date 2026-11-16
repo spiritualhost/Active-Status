@@ -19,14 +19,14 @@ EOF
 #Installation of necessary packages
 sudo dnf install postgresql-server postgresql-contrib -y
 
-#Start postgresql server
-sudo systemctl start postgresql
-
 #Set postgresql server to run at boot
 sudo systemctl enable postgresql
 
 #Initialize the database
 sudo postgresql-setup --initdb --unit postgresql
+
+#Start postgresql server
+sudo systemctl start postgresql
 
 #User creation and database creation
 sudo -u postgres psql <<'SQL'
