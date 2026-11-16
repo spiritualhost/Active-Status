@@ -36,9 +36,13 @@ PostgreSQL can be [downloaded from their page here](https://www.postgresql.org/d
 
 ### Installation
 
-Under construction...
+#### Fedora
 
-**Setup script will exist here**
+```bash
+cd ./setup-sql
+sudo chmod +x ./fedora.sh
+sudo ./fedora.sh
+```
 
 ## Compile
 
