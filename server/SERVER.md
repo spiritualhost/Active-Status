@@ -44,6 +44,8 @@ sudo chmod +x ./fedora.sh
 sudo ./fedora.sh
 ```
 
+The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed.
+
 ## Compile
 
 The file `active-status-daemon.spec` is used to properly link the dlls required by the psycopg2 library.
