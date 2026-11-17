@@ -37,5 +37,12 @@ CREATE DATABASE active_status OWNER as_admin;
 \l 
 SQL
 
+#Firewall setup
+sudo firewall-cmd --permanent --add-port=5432/tcp 
+
+sudo -u postgres psql -c "ALTER SYSTEM SET listen_addresses TO '*';" && sudo systemctl restart postgresql
+
+HBA=$(sudo -u postgres psql -t -P format=unaligned -c 'SHOW hba_file;') && echo "host all all 0.0.0.0/0 scram-sha-256" | sudo tee -a "$HBA" && sudo systemctl reload postgresql
+
 #Restart the computer here
 echo "Setup complete. Restart your Linux server."
