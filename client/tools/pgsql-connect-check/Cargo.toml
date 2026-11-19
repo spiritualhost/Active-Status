@@ -1,0 +1,9 @@
+[package]
+name = "pgsql-connect-check"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenvy = "0.15.7"
+postgres = "0.19.14"
+rfd = "0.18.0"

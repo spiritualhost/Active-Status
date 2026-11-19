@@ -5,3 +5,4 @@ dev/
 Output/
 *.pyc
 inventory.ini
+client/tools/pgsql-connect-check/target/
