@@ -34,8 +34,13 @@ CREATE USER write_only WITH PASSWORD 'PasswordWrite1';
 CREATE USER read_only WITH PASSWORD 'PasswordRead1';
 CREATE USER as_admin WITH PASSWORD 'Admin1';
 CREATE DATABASE active_status OWNER as_admin;
+GRANT pg_read_all_data TO read_only;
+GRANT pg_write_all_data TO writeonly_user; 
 \l 
 SQL
+
+#Reload postgresql
+sudo systemctl reload postgresql
 
 #Firewall setup
 sudo firewall-cmd --permanent --add-port=5432/tcp 

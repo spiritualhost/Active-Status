@@ -44,7 +44,7 @@ sudo chmod +x ./fedora.sh
 sudo ./fedora.sh
 ```
 
-The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed.
+The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed. It is recommended to do this automatically, previous to dispersing the `.env` files.
 
 ## Compile
 
