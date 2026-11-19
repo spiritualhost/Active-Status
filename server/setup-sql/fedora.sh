@@ -35,7 +35,7 @@ CREATE USER read_only WITH PASSWORD 'PasswordRead1';
 CREATE USER as_admin WITH PASSWORD 'Admin1';
 CREATE DATABASE active_status OWNER as_admin;
 GRANT pg_read_all_data TO read_only;
-GRANT pg_write_all_data TO writeonly_user; 
+GRANT pg_write_all_data TO write_only; 
 \l 
 SQL
 
