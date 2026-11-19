@@ -21,7 +21,6 @@ fn attempt_pgsql_connection(database: &str, user: &str, password: &str, host: &s
 }
 
 fn main() {
-    println!("Opening file explorer...");
 
     //Opens file explorer to select a file
     let selected_path: Option<PathBuf> = FileDialog::new()
