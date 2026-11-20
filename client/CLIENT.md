@@ -26,7 +26,7 @@ PORT=5432
 
 Note that port 5432 is the default port for PostgreSQL and can be changed.
 
-The machines do not need to be domain joined, just on the same network as the SQL server. Much of this credential information will be found when initially setting up the SQL server and additional details on setup can be found [on the serverside README](../server/SERVER.md).
+The machines do not need to be domain joined, just on the same network as the SQL server. Much of this credential information will be found when initially setting up the SQL server and additional details on setup can be found [on the serverside README](../server/SERVER.md). To check the connection to the central SQL server, try using the pgsql-connect-check tool located [here](tools/pgsql-connect-check/).
 
 ## Logs
 
