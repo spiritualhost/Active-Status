@@ -9,11 +9,11 @@ Enter a destination email and a threshold in days for notification.
 A `.env` file will be necessary to complete the reads from the SQL table. The `.env` will need to be structured like this:
 
 ```shell
-DATABASE="{database name}"
-USER="{read only username}"
+DATABASE="active_status"
+USER="read_only"
 PASSWORD="{read only user's password}"
 HOST="{IP address for PostgreSQL server}"
-PORT="{server port, default is usually 5432}"
+PORT=5432
 ```
 
 SMTP server credentials are necessary to the performance of the daemon, so they will be entered when the GUI is launched -- do this by doubleclicking on the exe (the GUI will also launch via the command line and if a config file doesn't exist).
