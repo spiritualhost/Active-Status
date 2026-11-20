@@ -42,12 +42,14 @@ fn main() {
     let user = env::var("USER").expect("User value must be set");
     let password = env::var("PASSWORD").expect("Password value must be set");
     let host = env::var("HOST").expect("Host value must be set");
-    let port = env::var("PORT").expect("Port value must be set");
+    let port: u16 = env::var("PORT")
+        .expect("Port value must be set")
+        .trim()
+        .parse()
+        .expect("Invalid number for port");
 
     //Attempt to make connection to postgresql server
-    let port_u16: u16 = port.trim().parse().expect("Invalid number for port");
-
-    match attempt_pgsql_connection(&database, &user, &password, &host, port_u16) {
+    match attempt_pgsql_connection(&database, &user, &password, &host, port) {
         Ok(_client) => {
             println!("Connected!");
         }
