@@ -30,13 +30,37 @@ sudo systemctl start postgresql
 
 #User creation and database creation
 sudo -u postgres psql <<'SQL'
+
+-- Set up default passwords for users
 CREATE USER write_only WITH PASSWORD 'PasswordWrite1';
 CREATE USER read_only WITH PASSWORD 'PasswordRead1';
 CREATE USER as_admin WITH PASSWORD 'Admin1';
+
+-- Create Active Status database
 CREATE DATABASE active_status OWNER as_admin;
-GRANT pg_read_all_data TO read_only;
-GRANT pg_write_all_data TO write_only; 
-\l 
+
+-- Switch into database, create servers table, and make additional changes
+\c active_status
+CREATE TABLE IF NOT EXISTS servers (
+    date DATE,
+    hostname VARCHAR(255),
+    activation_period DOUBLE PRECISION
+);
+
+-- Allow both read_only and write_only to connect to the database and access the public schema
+GRANT CONNECT ON DATABASE active_status TO read_only, write_only;
+GRANT USAGE ON SCHEMA public TO read_only, write_only;
+
+-- Grant read only access (SELECT)
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO read_only;
+
+-- Grant write only access (INSERT only -- cannot SELECT, UPDATE, or DELETE)
+GRANT INSERT ON ALL TABLES IN SCHEMA public TO write_only;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT INSERT ON TABLES TO write_only;
+
+-- View results
+\d servers
 SQL
 
 #Reload postgresql
