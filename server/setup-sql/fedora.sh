@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS servers (
     hostname TEXT,
     activation_period DOUBLE PRECISION
 );
+ALTER TABLE servers OWNER TO as_admin;
 
 -- Allow both read_only and write_only to connect to the database and access the public schema
 GRANT CONNECT ON DATABASE active_status TO read_only, write_only;
