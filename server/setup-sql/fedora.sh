@@ -43,7 +43,7 @@ CREATE DATABASE active_status OWNER as_admin;
 \c active_status
 CREATE TABLE IF NOT EXISTS servers (
     date DATE,
-    hostname VARCHAR(255),
+    hostname TEXT,
     activation_period DOUBLE PRECISION
 );
 
