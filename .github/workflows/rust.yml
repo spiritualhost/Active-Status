@@ -4,14 +4,17 @@ on:
   push:
     branches:
       -  main
-  #Only run when Rust files change or when the github action changes or on a pull request
+    tags: ['v*']
+    #Only run when Rust files change or when the github action changes or on a pull request
     paths:
       - 'client/tools/pgsql-connect-check/**'
       - '.github/workflows/rust.yml'
   pull_request:
     paths:
       - 'client/tools/pgsql-connect-check/**'
-      - 'pgsql-connect-check/**'
+
+permissions:
+  contents: write #To create releases
 
 env:
   CARGO_TERM_COLOR: always
@@ -36,3 +39,15 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+
+    #All below runs on a version tag, and only if the steps above passed
+    - name: Build release binary
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: cargo build --release
+
+    - name: Publish GitHub release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: client/tools/pgsql-connect-check/target/release/pgsql-connect-check.exe
+        generate_release_notes: true
