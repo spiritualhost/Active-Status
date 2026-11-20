@@ -4,18 +4,34 @@ on:
   push:
     branches:
       -  main
-  #Only run when Rust files change
+  #Only run when Rust files change or when the github action changes or on a pull request
     paths:
       - 'client/tools/pgsql-connect-check/**'
+      - '.github/workflows/rust.yml'
+  pull_request:
+    paths:
+      - 'client/tools/pgsql-connect-check/**'
+      - 'pgsql-connect-check/**'
 
 env:
   CARGO_TERM_COLOR: always
+
+defaults:
+  run:
+    working-directory: client/tools/pgsql-connect-check
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
+
+    - uses: dtolnay/rust-toolchain@stable
+
+    - uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: client/tools/pgsql-connect-check
+
     - name: Build
       run: cargo build --verbose
     - name: Run tests
