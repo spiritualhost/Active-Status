@@ -51,17 +51,33 @@ The database name is set to `active_status` in the above script. Passwords are s
 The server email daemon doesn't necessarily need to be on the same machine (it can even run on a Windows machine if preferred) to give users the flexibility to centralize their SQL setup. Run the following to set up a daily scan and email blast:
 
 ```bash
-...
+cd dist/
+chmod +x active-status-daemon
+
+#Use the following as the absolute path
+echo "$PWD/active-status-daemon"
+
+crontab -e
 ```
 
-**Cron script to come**
+The crontab editor will open. Add the following job all the way at the bottom:
+
+```bash
+0 8 * * * {absolute-path} --db_check
+```
+
+Confirm the cronjob with:
+
+```bash
+crontab -l
+```
 
 ## Compile
 
 The file `active-status-daemon.spec` is used to properly link the dlls required by the `psycopg2` library.
 
 ```powershell
-pyinstaller.exe .\active-status-daemon.spec
+pyinstaller.exe active-status-daemon.spec
 ```
 
 If compiling for a Fedora system, first install the following development libraries to properly build the `psycopg2` library from source:
