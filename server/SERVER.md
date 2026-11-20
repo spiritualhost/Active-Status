@@ -48,10 +48,14 @@ The database name is set to `active_status` in the above script. Passwords are s
 
 ## Compile
 
-The file `active-status-daemon.spec` is used to properly link the dlls required by the psycopg2 library.
+The file `active-status-daemon.spec` is used to properly link the dlls required by the `psycopg2` library.
 
 ```powershell
 pyinstaller.exe .\active-status-daemon.spec
 ```
 
-This daemon is currently compatible with Windows systems.
+If compiling for a Fedora system, first install the following development libraries to properly build the `psycopg2` library from source:
+
+```bash
+sudo dnf install libpq-devel python3-devel gcc
+```
