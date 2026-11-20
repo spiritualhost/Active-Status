@@ -2,9 +2,18 @@
 //Useful for troubleshooting why a specific endpoint has connection issues
 use std::path::PathBuf;
 use std::{process, env};
+use std::io::{stdin, stdout, Read, Write};
 use postgres::{Client, Config, Error, NoTls};
 use rfd::FileDialog;
 use dotenvy;
+
+//Pause execution until Enter is pressed
+fn pause() {
+    let mut stdout = stdout();
+    stdout.write(b"Press Enter to continue...").unwrap();
+    stdout.flush().unwrap();
+    stdin().read(&mut [0]).unwrap();
+}
 
 fn attempt_pgsql_connection(database: &str, user: &str, password: &str, host: &str, port: u16) -> Result<Client, Error> {
     //Make a connection to the pgsql server
@@ -52,9 +61,11 @@ fn main() {
     match attempt_pgsql_connection(&database, &user, &password, &host, port) {
         Ok(_client) => {
             println!("Connected!");
+            pause();
         }
         Err(e) => {
             eprintln!("Failed to connect: {}", e);
+            pause();
         }
     }    
 }   
