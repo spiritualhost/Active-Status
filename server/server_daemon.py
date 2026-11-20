@@ -1,6 +1,8 @@
 # Get notifications by email when certain machines hit a predetermined threshold
 import argparse
 import os
+import sys
+from pathlib import Path
 import configparser
 import smtplib
 import socket
@@ -246,8 +248,12 @@ if __name__ == "__main__":
     argparser.add_argument("--config", type=str, default=None, help="Explicit path to config.ini file for automation.")
     args = argparser.parse_args()
 
-    #Write configurations to APPDATA to prevent permissions issues
-    app_data_path = os.environ.get("PROGRAMDATA")
+    #Write configurations to APPDATA to prevent permissions issues (with logic for Linux setups)
+    if sys.platform == "win32":
+        app_data_path = Path(os.environ.get("PROGRAMDATA"))
+    else:
+        #Standard Linux location for shared variable application data
+        app_data_path = Path("/var/lib")
     config_directory = os.path.join(app_data_path, "ThresholdNotifications (ActiveStatus)", "Config")
     os.makedirs(config_directory, exist_ok=True) #Create config directory if nonexistent
     
