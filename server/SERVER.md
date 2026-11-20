@@ -26,6 +26,8 @@ python.exe .\server_daemon.py --db_check
 
 Or similarly with the compiled executable.
 
+On Fedora, perform a scan and email with 
+
 The daemon expects explicit TLS, so a TLS port should be specified for the SMTP server. It is recommended to set up 2FA or MFA on whichever SMTP account is used, given the method of credential storage (this can be improved in the future).
 
 ## PostgreSQL
@@ -39,12 +41,20 @@ PostgreSQL can be [downloaded from their page here](https://www.postgresql.org/d
 #### Fedora
 
 ```bash
-cd ./setup-sql
-sudo chmod +x ./fedora.sh
-sudo ./fedora.sh
+#Set up SQL
+sudo chmod +x ./setup-sql/fedora.sh
+sudo ./setup-sql/fedora.sh
 ```
 
 The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed. It is recommended to do this automatically, previous to dispersing the `.env` files.
+
+The server email daemon doesn't necessarily need to be on the same machine (it can even run on a Windows machine if preferred) to give users the flexibility to centralize their SQL setup. Run the following to set up a daily scan and email blast:
+
+```bash
+...
+```
+
+**Cron script to come**
 
 ## Compile
 
@@ -58,4 +68,11 @@ If compiling for a Fedora system, first install the following development librar
 
 ```bash
 sudo dnf install libpq-devel python3-devel gcc
+```
+
+Test an email by running the script once to set up SMTP, then running again with the --db_check flag:
+
+```bash
+sudo ./active-status-daemon
+sudo ./active-status-daemon --db_check
 ```
