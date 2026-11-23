@@ -5,18 +5,21 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    paths: 
+      - 'client/**'
+      - 'server/**'
   pull_request:
-    branches: [ "main" ]
+    paths:
+      - 'client/**'
+      - 'server/**'      
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
 
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
@@ -40,4 +43,3 @@ jobs:
         pyinstaller server\active-status-daemon.spec
         if (!(Test-Path "server\dist\active-status-daemon.exe")) { exit 1 }
       shell: pwsh
-        
