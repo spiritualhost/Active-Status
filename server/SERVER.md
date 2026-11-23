@@ -63,7 +63,7 @@ crontab -e
 The crontab editor will open. Add the following job all the way at the bottom:
 
 ```bash
-0 8 * * * {absolute-path} --db_check
+0 8 * * * cd {/absolute/path/to/folder/for/dist} && ./active-status-daemon --db_check  >> /home/{current-user}/active-status-cron.log 2>&1
 ```
 
 Confirm the cronjob with:
@@ -71,6 +71,14 @@ Confirm the cronjob with:
 ```bash
 crontab -l
 ```
+
+And change the ownership to the current user so the cronjob runs unattended without issues:
+
+```bash
+sudo chown -R $USER: "/var/lib/ThresholdNotifications (ActiveStatus)"
+```
+
+If any errors are thrown, check the `active-status-cron.log` file.
 
 ## Compile
 
