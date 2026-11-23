@@ -54,9 +54,6 @@ The server email daemon doesn't necessarily need to be on the same machine (it c
 cd dist/
 chmod +x active-status-daemon
 
-#Use the following as the absolute path
-echo "$PWD/active-status-daemon"
-
 crontab -e
 ```
 
