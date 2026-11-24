@@ -75,12 +75,6 @@ Confirm the cronjob with:
 crontab -l
 ```
 
-And change the ownership to the current user so the cronjob runs unattended without issues:
-
-```bash
-sudo chown -R $USER: "/var/lib/ThresholdNotifications (ActiveStatus)"
-```
-
 If any errors are thrown, check the `active-status-cron.log` file.
 
 ## Compile
