@@ -9,7 +9,7 @@ sudo dnf autoremove -y
 sudo dnf clean all
 
 #Install dependencies idempotently
-sudo dnf install libpq-devel python3-devel gcc -y
+sudo dnf install libpq-devel python3-devel gcc python3-tkinter -y
 
 #Set up and enter virtual environment
 python3 -m venv .venv
