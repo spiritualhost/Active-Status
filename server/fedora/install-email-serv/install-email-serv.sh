@@ -37,6 +37,16 @@ fi
 #Clean up build files
 sudo rm -rf build/
 
+#Set up cronjob
+DIST_PATH="$PWD/dist/"
+USERNAME="$USER"
+CRON_JOB="0 17 * * * cd '$DIST_PATH' && ./active-status-daemon --db_check  >> /home/$USERNAME/active-status-cron.log 2>&1"
+(crontab -l 2>/dev/null || true; echo "$CRON_JOB") | crontab -
+crontab -l
+
+#Change folder ownership
+sudo chown -R $USER: "/var/lib/ThresholdNotifications (ActiveStatus)"
+
 #Exit message
 echo "Active Status is now set up."
 read -r -p "Press Enter to continue..."
