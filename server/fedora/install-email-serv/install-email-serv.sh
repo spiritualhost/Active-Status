@@ -9,7 +9,7 @@ sudo dnf autoremove -y
 sudo dnf clean all
 
 #Install dependencies idempotently
-sudo dnf install libpq-devel python3-devel gcc 
+sudo dnf install libpq-devel python3-devel gcc -y
 
 #Set up and enter virtual environment
 python3 -m venv .venv
@@ -26,7 +26,7 @@ deactivate
 
 #Confirm output exists (-f), is not empty (-s), and is executable (-x)
 APP_NAME="active-status-daemon"
-OUTPUT="./dist/${APP_NAMER}"
+OUTPUT="./dist/${APP_NAME}"
 if [[ -f "$OUTPUT" && -s "$OUTPUT" && -x "$OUTPUT" ]]; then
     echo "Successful: binary created at $OUTPUT"
 else
