@@ -60,7 +60,7 @@ crontab -e
 The crontab editor will open. Add the following job all the way at the bottom:
 
 ```bash
-0 8 * * * cd {/absolute/path/to/folder/for/dist} && ./active-status-daemon --db_check  >> /home/{current-user}/active-status-cron.log 2>&1
+0 17 * * * cd {/absolute/path/to/folder/for/dist} && ./active-status-daemon --db_check  >> /home/{current-user}/active-status-cron.log 2>&1
 ```
 
 Confirm the cronjob with:
