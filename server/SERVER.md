@@ -43,7 +43,7 @@ PostgreSQL can be [downloaded from their page here](https://www.postgresql.org/d
 ```bash
 #Set up SQL
 sudo chmod +x ./fedora/setup-sql/fedora.sh
-sudo ./fedora/setup-sql/fedora.sh
+./fedora/setup-sql/fedora.sh
 ```
 
 The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed. It is recommended to do this automatically, previous to dispersing the `.env` files.
@@ -51,7 +51,7 @@ The database name is set to `active_status` in the above script. Passwords are s
 ```bash
 #Set up the email daemon server
 sudo chmod +x ./fedora/install-email-serv/install-email-serv.sh
-sudo ./fedora/install-email-serv/install-email-serv.sh
+./fedora/install-email-serv/install-email-serv.sh
 ```
 
 The server email daemon doesn't necessarily need to be on the same machine (it can even run on a Windows machine if preferred) to give users the flexibility to centralize their SQL setup. Run the following to set up a daily scan and email blast:
