@@ -54,12 +54,11 @@ sudo chmod +x ./fedora/install-email-serv/install-email-serv.sh
 ./fedora/install-email-serv/install-email-serv.sh
 ```
 
-The server email daemon doesn't necessarily need to be on the same machine (it can even run on a Windows machine if preferred) to give users the flexibility to centralize their SQL setup. Run the following to set up a daily scan and email blast:
+The server email daemon doesn't necessarily need to be on the same machine (it can even run on a Windows machine if preferred) to give users the flexibility to centralize their SQL setup. If running both the email daemon and the SQL server on the same machine, the localhost address may not work for the `.env` file -- switch it to the LAN-accessible address of the machine instead.
+
+The installation script will set up a cronjob for email blasts. Confirm it set up properly with:
 
 ```bash
-cd dist/
-chmod +x active-status-daemon
-
 crontab -e
 ```
 
@@ -69,13 +68,7 @@ The crontab editor will open. Add the following job all the way at the bottom:
 0 17 * * * cd {/absolute/path/to/folder/for/dist} && ./active-status-daemon --db_check  >> /home/{current-user}/active-status-cron.log 2>&1
 ```
 
-Confirm the cronjob with:
-
-```bash
-crontab -l
-```
-
-If any errors are thrown, check the `active-status-cron.log` file.
+If any errors are thrown when performing a cronjob, check the `active-status-cron.log` file.
 
 ## Compile
 
