@@ -48,7 +48,7 @@ sudo chmod +x ./fedora/setup-sql/fedora.sh
 ./fedora/setup-sql/fedora.sh
 ```
 
-The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed. It is recommended to do this automatically, previous to dispersing the `.env` files.
+The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but *they are weak passwords and should be changed* (see the SQL tips below). It is recommended to do this automatically, previous to dispersing the `.env` files.
 
 ```bash
 #Set up the email daemon server
@@ -76,7 +76,7 @@ If any errors are thrown when performing a cronjob, check the `active-status-cro
 
 <summary>Tips for the Active Status SQL Table</summary>
 
-To check heartbeats for the current day, run:
+#### Check the heartbeats for the current day
 
 ```bash
 sudo -u postgres psql -d active_status 
@@ -87,6 +87,20 @@ Then from the SQL shell:
 ```SQL
 SELECT * FROM servers WHERE date = CURRENT_DATE;
 ```
+
+#### Change user passwords
+
+```bash
+sudo -u postgres psql
+```
+
+Then from the SQL shell:
+
+```SQL
+\password {username}
+```
+
+When changing the default passwords, do the above for read_only, write_only, and as_admin.
 
 </details>
 
