@@ -16,6 +16,8 @@ HOST="{IP address for PostgreSQL server}"
 PORT=5432
 ```
 
+**Place the `.env` in the same directory as the executable unless otherwise prompted.**
+
 SMTP server credentials are necessary to the performance of the daemon, so they will be entered when the GUI is launched -- do this by doubleclicking on the exe (the GUI will also launch via the command line and if a config file doesn't exist).
 
 Launch a database scan with the settings specified in the config file with:
@@ -69,6 +71,24 @@ The crontab editor will open. Add the following job all the way at the bottom:
 ```
 
 If any errors are thrown when performing a cronjob, check the `active-status-cron.log` file.
+
+<details>
+
+<summary>Tips for the Active Status SQL Table</summary>
+
+To check heartbeats for the current day, run:
+
+```bash
+sudo -u postgres psql -d active_status 
+```
+
+Then from the SQL shell:
+
+```SQL
+SELECT * FROM servers WHERE date = CURRENT_DATE;
+```
+
+</details>
 
 ## Compile
 
