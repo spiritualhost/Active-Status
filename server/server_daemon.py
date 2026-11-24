@@ -28,7 +28,6 @@ def valid_email(email_address: str):
 
 #Verify valid SMTP credentials (necessary to perform)
 def verify_smtp_server(smtp_server: str, port: int, username: str, password: str, use_tls=True):
-    print(f"Server: {smtp_server}\nPort: {port}\nUsername: {username}\nPassword: {password}")
     try:
         #Establish an initial connection with a 10 sec timeout
         server = smtplib.SMTP(smtp_server, port, timeout=10)
