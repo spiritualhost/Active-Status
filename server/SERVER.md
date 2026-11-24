@@ -48,6 +48,12 @@ sudo ./fedora/setup-sql/fedora.sh
 
 The database name is set to `active_status` in the above script. Passwords are set for all three necessary users as well, but they are weak passwords and should be changed. It is recommended to do this automatically, previous to dispersing the `.env` files.
 
+```bash
+#Set up the email daemon server
+sudo chmod +x ./fedora/install-email-serv/install-email-serv.sh
+sudo ./fedora/install-email-serv/install-email-serv.sh
+```
+
 The server email daemon doesn't necessarily need to be on the same machine (it can even run on a Windows machine if preferred) to give users the flexibility to centralize their SQL setup. Run the following to set up a daily scan and email blast:
 
 ```bash
@@ -89,7 +95,7 @@ If compiling for a Fedora system, first install the following development librar
 
 ```bash
 sudo dnf install libpq-devel python3-devel gcc
-pyinstaller .\active-status-daemon.spec
+pyinstaller active-status-daemon.spec
 ```
 
 Test an email by running the script once to set up SMTP, then running again with the --db_check flag:
