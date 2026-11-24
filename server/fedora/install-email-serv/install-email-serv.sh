@@ -45,6 +45,8 @@ CRON_JOB="0 17 * * * cd '$DIST_PATH' && ./active-status-daemon --db_check  >> /h
 (crontab -l 2>/dev/null || true; echo "$CRON_JOB") | crontab -
 crontab -l
 
+#Spawn window to launch SMTP setup
+sudo ./dist/active-status-daemon
+
 #Exit message
-echo "Active Status is now set up."
 read -r -p "Press Enter to continue..."
