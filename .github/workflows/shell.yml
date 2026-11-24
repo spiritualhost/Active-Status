@@ -1,0 +1,19 @@
+name: shell
+
+on:
+  push:
+    branches:
+      -  main
+    paths:
+      - 'server/fedora/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run ShellCheck
+        uses: Azbagheri/shell-linter@latest
+        with:
+            path: 'server/fedora/*.sh'
