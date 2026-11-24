@@ -45,6 +45,20 @@ CRON_JOB="0 17 * * * cd '$DIST_PATH' && ./active-status-daemon --db_check  >> /h
 (crontab -l 2>/dev/null || true; echo "$CRON_JOB") | crontab -
 crontab -l
 
+#Set up .env file
+read -s -r -p "Enter SQL database password for user 'read_only': " DB_RO_PW #Prompt silently for read_only password
+echo "" #Print a newline since -s suppresses the user's Enter key
+
+cat << EOF > ./dist/.env
+DATABASE="active_status"
+USER="read_only"
+PASSWORD="$DB_RO_PW"
+HOST="{IP address for PostgreSQL server}"
+PORT=5432
+EOF
+
+echo "Wrote .env file to ./dist."
+
 #Spawn window to launch SMTP setup
 sudo ./dist/active-status-daemon
 
