@@ -1,7 +1,7 @@
 #Script to automate the entire installation of the email server component of Active Status
 
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 #Initial update
 sudo dnf upgrade -y
@@ -49,15 +49,18 @@ crontab -l
 read -s -r -p "Enter SQL database password for user 'read_only': " DB_RO_PW #Prompt silently for read_only password
 echo "" #Print a newline since -s suppresses the user's Enter key
 
-cat << EOF > ./dist/.env
+if cat << EOF > ./dist/.env
 DATABASE="active_status"
 USER="read_only"
 PASSWORD="$DB_RO_PW"
 HOST="{IP address for PostgreSQL server}"
 PORT=5432
 EOF
+then
+    echo "Wrote .env file to ./dist."
+else
+    echo "Failed to write .env file." >&2
 
-echo "Wrote .env file to ./dist."
 
 #Spawn window to launch SMTP setup
 sudo ./dist/active-status-daemon
