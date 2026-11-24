@@ -29,6 +29,7 @@ APP_NAME="active-status-daemon"
 OUTPUT="./dist/${APP_NAME}"
 if [[ -f "$OUTPUT" && -s "$OUTPUT" && -x "$OUTPUT" ]]; then
     echo "Successful: binary created at $OUTPUT"
+    sudo chmod +x "$OUTPUT"
 else
     echo "Invalid binary." >&2
     exit 1
