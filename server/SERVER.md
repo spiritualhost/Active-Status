@@ -91,12 +91,16 @@ SELECT * FROM servers WHERE date = CURRENT_DATE;
 #### Change user passwords
 
 ```bash
-sudo -u postgres psql
+sudo -u postgres psql -d active_status
 ```
 
 Then from the SQL shell:
 
 ```SQL
+--List all users
+\du
+
+--Change default passwords
 \password {username}
 ```
 
