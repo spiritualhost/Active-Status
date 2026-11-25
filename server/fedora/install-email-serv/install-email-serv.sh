@@ -60,7 +60,7 @@ then
     echo "Wrote .env file to ./dist."
 else
     echo "Failed to write .env file." >&2
-
+fi
 
 #Spawn window to launch SMTP setup
 sudo ./dist/active-status-daemon
