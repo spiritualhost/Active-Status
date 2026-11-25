@@ -16,4 +16,4 @@ jobs:
       - name: Run ShellCheck
         uses: Azbagheri/shell-linter@latest
         with:
-            path: 'server/fedora/*.sh'
+            path: 'server/fedora/**'
